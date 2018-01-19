@@ -145,6 +145,10 @@ const actors = [{
   }]
 }];
 
+for (const e of deliveries) { 
+    e.price = e.distance + e.volume;
+}
+
 console.log(truckers);
 console.log(deliveries);
 console.log(actors);
