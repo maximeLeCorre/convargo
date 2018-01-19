@@ -166,9 +166,9 @@ for (const e of deliveries) {
 	}
 	
 	//Computation of the comissions
-	e.commission.insurance = e.price / 2;
+	e.commission.insurance = Math.round((e.price * 0.3) / 2 , 2);
 	e.commission.treasury = Math.ceil(e.distance / 500);
-	e.commission.convargo = e.price - e.commission.insurance - e.commission.treasury;
+	e.commission.convargo = Math.round((e.price * 0.3) - e.commission.insurance - e.commission.treasury, 2);
 	
 	//Computation of the deductible option
 	if(e.options.deductibleReduction == true){
@@ -176,6 +176,28 @@ for (const e of deliveries) {
 		e.commission.convargo += e.volume;
 	}
 	
+	//Pay the actors
+	for(const i of actors) {
+		if(e.id == i.deliveryId){
+			for(const pay of i.payment){
+				if(pay.who == 'shipper' && pay.type == 'debit'){
+					pay.amount = e.price;
+				}
+				else if(pay.who == 'insurance' && pay.type == 'credit'){
+					pay.amount = e.commission.insurance;
+				}
+				else if(pay.who == 'treasury' && pay.type == 'credit'){
+					pay.amount = e.commission.treasury;
+				}
+				else if(pay.who == 'convargo' && pay.type == 'credit'){
+					pay.amount = e.commission.convargo;
+				}
+				else if(pay.who == 'trucker' && pay.type == 'credit'){
+					pay.amount = e.price - e.commission.insurance - e.commission.treasury - e.commission.convargo;
+				}
+			}
+		}
+	}
 }
 
 
