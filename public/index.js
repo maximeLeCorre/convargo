@@ -169,6 +169,13 @@ for (const e of deliveries) {
 	e.commission.insurance = e.price / 2;
 	e.commission.treasury = Math.ceil(e.distance / 500);
 	e.commission.convargo = e.price - e.commission.insurance - e.commission.treasury;
+	
+	//Computation of the deductible option
+	if(e.options.deductibleReduction == true){
+		e.price += e.volume;
+		e.commission.convargo += e.volume;
+	}
+	
 }
 
 
