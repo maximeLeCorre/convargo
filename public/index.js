@@ -147,6 +147,8 @@ const actors = [{
 
 for (const e of deliveries) { 
 
+	
+	//Computation of the price
 	e.price = e.distance + e.volume;
 	
 	for(const i of truckers) {
@@ -162,7 +164,14 @@ for (const e of deliveries) {
 			}
 		}
 	}
+	
+	//Computation of the comissions
+	e.commission.insurance = e.price / 2;
+	e.commission.treasury = Math.ceil(e.distance / 500);
+	e.commission.convargo = e.price - e.commission.insurance - e.commission.treasury;
 }
+
+
 
 console.log(truckers);
 console.log(deliveries);
