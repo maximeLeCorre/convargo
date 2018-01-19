@@ -146,7 +146,22 @@ const actors = [{
 }];
 
 for (const e of deliveries) { 
-    e.price = e.distance + e.volume;
+
+	e.price = e.distance + e.volume;
+	
+	for(const i of truckers) {
+		if(e.truckerId == i.id){
+			if(i.pricePerVolume >= 5 && i.pricePerVolume < 10){
+				e.price = e.price - 0.10 * e.price;
+			}
+			else if(i.pricePerVolume >= 10 && i.pricePerVolume < 25){
+				e.price = e.price - 0.30 * e.price;
+			}
+			else if(i.pricePerVolume >= 25){
+				e.price = e.price - 0.50 * e.price;
+			}
+		}
+	}
 }
 
 console.log(truckers);
