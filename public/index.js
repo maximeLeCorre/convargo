@@ -145,55 +145,55 @@ const actors = [{
   }]
 }];
 
-for (const e of deliveries) { 
+for (const deliveriy of deliveries) { 
 
 	
 	//Computation of the price
-	e.price = e.distance + e.volume;
+	deliveriy.price = deliveriy.distance + deliveriy.volume;
 	
 	for(const i of truckers) {
-		if(e.truckerId == i.id){
+		if(deliveriy.truckerId == i.id){
 			if(i.pricePerVolume >= 5 && i.pricePerVolume < 10){
-				e.price = e.price - 0.10 * e.price;
+				deliveriy.price = deliveriy.price - 0.10 * deliveriy.price;
 			}
 			else if(i.pricePerVolume >= 10 && i.pricePerVolume < 25){
-				e.price = e.price - 0.30 * e.price;
+				deliveriy.price = deliveriy.price - 0.30 * deliveriy.price;
 			}
 			else if(i.pricePerVolume >= 25){
-				e.price = e.price - 0.50 * e.price;
+				deliveriy.price = deliveriy.price - 0.50 * deliveriy.price;
 			}
 		}
 	}
 	
 	//Computation of the comissions
-	e.commission.insurance = Math.round((e.price * 0.3) / 2 , 2);
-	e.commission.treasury = Math.ceil(e.distance / 500);
-	e.commission.convargo = Math.round((e.price * 0.3) - e.commission.insurance - e.commission.treasury, 2);
+	deliveriy.commission.insurance = Math.round((deliveriy.price * 0.3) / 2 , 2);
+	deliveriy.commission.treasury = Math.ceil(deliveriy.distance / 500);
+	deliveriy.commission.convargo = Math.round((deliveriy.price * 0.3) - deliveriy.commission.insurance - deliveriy.commission.treasury, 2);
 	
 	//Computation of the deductible option
-	if(e.options.deductibleReduction == true){
-		e.price += e.volume;
-		e.commission.convargo += e.volume;
+	if(deliveriy.options.deductibleReduction == true){
+		deliveriy.price += deliveriy.volume;
+		deliveriy.commission.convargo += deliveriy.volume;
 	}
 	
 	//Pay the actors
-	for(const i of actors) {
-		if(e.id == i.deliveryId){
-			for(const pay of i.payment){
+	for(const actor of actors) {
+		if(deliveriy.id == actor.deliveryId){
+			for(const pay of actor.payment){
 				if(pay.who == 'shipper' && pay.type == 'debit'){
-					pay.amount = e.price;
+					pay.amount = deliveriy.price;
 				}
 				else if(pay.who == 'insurance' && pay.type == 'credit'){
-					pay.amount = e.commission.insurance;
+					pay.amount = deliveriy.commission.insurance;
 				}
 				else if(pay.who == 'treasury' && pay.type == 'credit'){
-					pay.amount = e.commission.treasury;
+					pay.amount = deliveriy.commission.treasury;
 				}
 				else if(pay.who == 'convargo' && pay.type == 'credit'){
-					pay.amount = e.commission.convargo;
+					pay.amount = deliveriy.commission.convargo;
 				}
 				else if(pay.who == 'trucker' && pay.type == 'credit'){
-					pay.amount = e.price - e.commission.insurance - e.commission.treasury - e.commission.convargo;
+					pay.amount = deliveriy.price - deliveriy.commission.insurance - deliveriy.commission.treasury - deliveriy.commission.convargo;
 				}
 			}
 		}
